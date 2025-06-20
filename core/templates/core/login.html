@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | نظام الإدارة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --error-color: #e63946;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+        }
+        
+        .login-header h2 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+        }
+        
+        .btn-login {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .form-floating label {
+            right: 1.5rem !important;
+            left: auto !important;
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: left;
+            margin-top: -0.8rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* رسائل الخطأ */
+        .error-message {
+            color: var(--error-color);
+            background-color: rgba(230, 57, 70, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--error-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-message i {
+            font-size: 1.2rem;
+        }
+        
+        .is-invalid {
+            border-color: var(--error-color) !important;
+        }
+        
+        .is-invalid:focus {
+            box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25) !important;
+        }
+        
+        .invalid-feedback {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: -0.8rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="brand-logo">
+                <i class="fas fa-lock" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+            </div>
+            
+            <div class="login-header">
+                <h2>مرحباً بعودتك</h2>
+                <p>الرجاء إدخال بيانات الدخول للوصول إلى حسابك</p>
+            </div>
+            
+            <!-- رسائل الخطأ -->
+            {% if form.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>
+                        {% if 'username' in form.errors %}
+                            اسم المستخدم غير صحيح أو غير موجود
+                        {% elif 'password' in form.errors %}
+                            كلمة المرور غير صحيحة
+                        {% else %}
+                            بيانات الدخول غير صحيحة
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- حقل اسم المستخدم -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control {% if 'username' in form.errors %}is-invalid{% endif %}" 
+                           id="username" name="username" placeholder="اسم المستخدم" required
+                           value="{{ form.username.value|default_if_none:'' }}">
+                    <label for="username"><i class="fas fa-user me-2"></i>اسم المستخدم</label>
+                    {% if 'username' in form.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.username.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- حقل كلمة المرور -->
+                <div class="form-floating mb-2">
+                    <input type="password" class="form-control {% if 'password' in form.errors %}is-invalid{% endif %}" 
+                           id="password" name="password" placeholder="كلمة المرور" required>
+                    <label for="password"><i class="fas fa-key me-2"></i>كلمة المرور</label>
+                    {% if 'password' in form.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.password.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <a href="#" class="forgot-password">نسيت كلمة المرور؟</a>
+                
+                <button type="submit" class="btn btn-primary btn-login w-100 py-2 mb-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

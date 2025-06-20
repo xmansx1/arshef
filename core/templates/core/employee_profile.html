@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الملف الشخصي للموظف</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4895ef;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #4cc9f0;
+      --warning-color: #f8961e;
+      --danger-color: #f72585;
+      --border-radius: 12px;
+      --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background-color: #f8fafc;
+      font-family: 'Cairo', sans-serif;
+      color: var(--dark-color);
+    }
+
+    .profile-card {
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      transition: var(--transition);
+    }
+
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    }
+
+    .profile-img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 4px solid white;
+      transition: var(--transition);
+    }
+
+    .profile-img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .attachment-card {
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: var(--border-radius);
+      background: #fff;
+      padding: 1.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .attachment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--box-shadow);
+      border-color: rgba(var(--primary-color), 0.2);
+    }
+
+    .form-section {
+      background-color: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 2.5rem;
+      border-top: 4px solid var(--primary-color);
+    }
+
+    .btn-edit {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-back {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      position: relative;
+      padding-right: 1rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    .section-title::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -8px;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+
+    .alert-transition {
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      font-weight: 600;
+    }
+
+    .alert-transition.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+    }
+
+    .info-item:last-child {
+      border-bottom: none;
+    }
+
+    .info-item i {
+      width: 30px;
+      color: var(--accent-color);
+      font-size: 1.1rem;
+      margin-left: 0.5rem;
+    }
+
+    .btn-custom {
+      border-radius: 50px;
+      padding: 0.5rem 1.25rem;
+      font-weight: 600;
+      transition: var(--transition);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .no-image-placeholder {
+      width: 160px;
+      height: 160px;
+      border-radius: var(--border-radius);
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      background: #f8fafc;
+      border-radius: var(--border-radius);
+      border: 2px dashed #e2e8f0;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+    }
+
+    .form-control, .form-select {
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      transition: var(--transition);
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+    }
+
+    .badge-role {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 0.35rem 0.75rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 768px) {
+      .profile-card {
+        padding: 1.5rem;
+      }
+      
+      .btn-edit, .btn-back {
+        position: static;
+        display: block;
+        margin-bottom: 1rem;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+{% if request.user.is_authenticated and request.user.role == 'employee' %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+  <div class="container d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-3">
+      <img src="{% if request.user.employeeprofile.personal_image %}{{ request.user.employeeprofile.personal_image.url }}{% else %}https://via.placeholder.com/40x40.png?text=👤{% endif %}" class="rounded-circle shadow-sm" width="40" height="40" alt="الصورة">
+      <span class="fw-semibold text-primary">مرحباً، {{ request.user.get_full_name }}</span>
+    </div>
+    <div>
+     <form method="post" action="{% url 'logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger btn-sm">
+    <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+  </button>
+</form>
+
+    </div>
+  </div>
+</nav>
+{% endif %}
+
+<div class="container py-5 position-relative">
+
+  <!-- ✅ عرض رسائل النظام -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-transition text-center fw-bold mb-4" role="alert">
+        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}times-circle{% else %}info-circle{% endif %} me-2"></i>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- زر العودة -->
+{% if request.user.role == 'manager' %}
+  <a href="{% url 'manager_dashboard' %}" class="btn btn-outline-secondary btn-sm btn-back">
+    <i class="fas fa-arrow-left me-2"></i>العودة إلى لوحة التحكم
+  </a>
+{% endif %}
+
+
+  <!-- زر تعديل البيانات -->
+  {% if request.user.role == 'manager' %}
+    <a href="{% url 'edit_employee' profile.user.id %}" class="btn btn-warning btn-sm btn-edit">
+      <i class="fas fa-edit me-2"></i>تعديل البيانات
+    </a>
+  {% endif %}
+
+  <div class="text-center mb-5">
+    <h3 class="fw-bold text-gradient d-inline-block">الملف الشخصي للموظف</h3>
+    <div class="badge-role mt-2">{{ profile.user.get_role_display }}</div>
+  </div>
+
+  <div class="profile-card">
+    <div class="row align-items-center">
+      <div class="col-md-4 text-center mb-4 mb-md-0">
+        {% if profile.personal_image %}
+          <img src="{{ profile.personal_image.url }}" class="profile-img" alt="الصورة الشخصية" />
+        {% else %}
+          <div class="no-image-placeholder mx-auto">
+            <span>لا توجد صورة</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="info-item">
+          <i class="fas fa-user"></i>
+          <div>
+            <strong>الاسم الكامل:</strong> 
+            <span class="text-primary">{{ profile.user.get_full_name }}</span>
+          </div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-id-card"></i>
+          <div><strong>رقم الهوية:</strong> {{ profile.national_id }}</div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-briefcase"></i>
+          <div><strong>المسمى الوظيفي:</strong> {{ profile.job_title }}</div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-building"></i>
+          <div><strong>القسم:</strong> {{ profile.department }}</div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-phone"></i>
+          <div><strong>الجوال:</strong> {{ profile.phone }}</div>
+        </div>
+        <div class="info-item">
+          <i class="fas fa-envelope"></i>
+          <div><strong>البريد الإلكتروني:</strong> {{ profile.user.email }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="section-title mt-5 mb-4"><i class="fas fa-paperclip me-2"></i>المرفقات</h4>
+  
+  {% if profile.attachments.all %}
+    <div class="row g-4">
+      {% for att in profile.attachments.all %}
+        <div class="col-md-6 col-lg-4">
+          <div class="attachment-card">
+            <div>
+              <h6 class="fw-bold mb-3">
+                <i class="fas fa-file-{{ att.get_file_icon }} text-primary me-2"></i>
+                {{ att.title }}
+              </h6>
+              <div class="d-flex align-items-center text-muted mb-3">
+                <i class="fas fa-calendar-alt me-2"></i>
+                <small>{{ att.uploaded_at|date:"Y-m-d" }}</small>
+                <span class="mx-2">•</span>
+                <i class="fas fa-file me-2"></i>
+                <small>{{ att.get_file_size }}</small>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="{{ att.file.url }}" target="_blank" class="btn btn-sm btn-custom btn-outline-primary flex-grow-1">
+                <i class="fas fa-eye me-2"></i>عرض
+              </a>
+              {% if request.user.role == 'manager' %}
+                <a href="{% url 'edit_attachment' att.id %}" class="btn btn-sm btn-custom btn-outline-warning">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'delete_attachment' att.id %}" class="btn btn-sm btn-custom btn-outline-danger">
+                  <i class="fas fa-trash"></i>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="fas fa-folder-open"></i>
+      <h5 class="text-muted mb-2">لا توجد مرفقات</h5>
+      <p class="text-muted">لم يتم رفع أي مرفقات حتى الآن</p>
+    </div>
+  {% endif %}
+
+  {% if request.user.role == 'manager' %}
+    <hr class="my-5 border-2 opacity-10" />
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h5 class="section-title m-0"><i class="fas fa-plus-circle me-2"></i>إضافة مرفق جديد</h5>
+      <div class="text-muted">
+        <span class="fw-bold">{{ profile.attachments.count }}</span> / 10
+      </div>
+    </div>
+    
+    {% if profile.attachments.count >= 10 %}
+      <div class="alert alert-warning fw-bold d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle me-3"></i>
+        <div>لا يمكن إضافة مرفقات جديدة، الحد الأقصى (10) تم الوصول إليه.</div>
+      </div>
+    {% else %}
+      <form method="post" enctype="multipart/form-data" class="form-section mt-3">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold">اسم المرفق:</label>
+            <input type="text" name="title" class="form-control" required placeholder="أدخل اسم المرفق" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">ملف المرفق:</label>
+            <input type="file" name="file" class="form-control" required />
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="btn btn-success px-4 btn-custom">
+            <i class="fas fa-upload me-2"></i>رفع المرفق
+          </button>
+        </div>
+      </form>
+    {% endif %}
+  {% endif %}
+</div>
+
+<!-- ✅ سكربت لتأثير ظهور الرسالة واختفائها -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // تأثير ظهور الرسائل
+    const alerts = document.querySelectorAll('.alert-transition');
+    alerts.forEach(alert => {
+      setTimeout(() => alert.classList.add('show'), 100);
+      setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transform = 'translateY(-20px)';
+        setTimeout(() => alert.remove(), 300);
+      }, 5000);
+    });
+
+    // تأثيرات عند التمرير
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.profile-card, .attachment-card, .form-section');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+        
+        if (elementPosition < screenPosition) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    };
+
+    // تعيين الخصائص الأولية للعناصر
+    document.querySelectorAll('.profile-card, .attachment-card, .form-section').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    });
+
+    // تشغيل التأثير عند التحميل وعند التمرير
+    window.addEventListener('load', animateOnScroll);
+    window.addEventListener('scroll', animateOnScroll);
+  });
+</script>
+
+</body>
+</html>
